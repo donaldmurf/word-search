@@ -72,41 +72,40 @@ def find_letter_location(board, letter):
 
 
 # searches for a word on the board
-def solve_game(list_of_words, board):
+def solve_game(word, board):
     # transpose columns into rows
     board_transpose = np.transpose(board)
-
+    # track row or column word where word was found
     row_count = 0
     column_count = 0
-    # Iterate through all the words in a list
-    for words in range(len(list_of_words)):
-        # reverse word to check right to left
-        reverse_word = list_of_words[words][::-1]
-        # find words in row
-        for row in board:
-            row_count += 1
-            # convert character list into single string
-            temp = ""
-            temp = temp.join(row)
-            # check to see if word match from left to right in string
-            if temp.__contains__(list_of_words[words]):
-                print(list_of_words[words] + " Found on row: " + str(row_count) + "\nin:" + temp)
-            # check to see if word matches from right to left in string
-            elif temp.__contains__(reverse_word):
-                print(list_of_words[words] + " Found on row: " + str(row_count) + "\nin:" + temp)
-        # find words in column
-        for column in board_transpose:
-            column_count += 1
-            # convert character list into single string
-            temp = ""
-            temp = temp.join(column)
-            if temp.__contains__(list_of_words[words]):
-                print(list_of_words[words] + " Found on column: " + str(column_count) + "\nin:" + temp)
-            elif temp.__contains__(reverse_word):
-                print(list_of_words[words] + " Found on column: " + str(column_count) + "\nin:" + temp)
+    # reverse the word to simulate right to left search
+    reverse_word = word[::-1]
+    # find words in row
+    for row in board:
+        row_count += 1
+        # convert character list into single string
+        temp = ""
+        temp = temp.join(row)
+        # check to see if word match from left to right in string
+        if temp.__contains__(word):
+            print(word + " Row: " + str(row_count) + "\nMatch L to R: " + temp)
+        # check to see if word matches from right to left in string
+        elif temp.__contains__(reverse_word):
+            print(word + " Row: " + str(row_count) + "\nMatch R to L: " + temp)
+    # find words in column
+    for column in board_transpose:
+        column_count += 1
+        # convert character list into single string
+        temp = ""
+        temp = temp.join(column)
+        if temp.__contains__(word):
+            print(word + " Column: " + str(column_count) + "\nMatch U to D:" + temp)
+        elif temp.__contains__(reverse_word):
+            print(word + " Column: " + str(column_count) + "\nMatch D to U:" + temp)
 
 
 if __name__ == '__main__':
     print_word_bank(word_bank)
     print_search_board(search_board)
-    solve_game(word_bank, search_board)
+    for word in range(len(word_bank)):
+        solve_game(word_bank[word], search_board)
