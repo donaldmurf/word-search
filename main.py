@@ -2,6 +2,8 @@
 # This program uses a list of words and
 # a board of letters to perform a word search.
 
+import numpy as np
+
 # Example of a list of words
 word_bank = ['BEACH', 'LIGHTHOUSE', 'JUNGLE', 'FISH',
              'DOCK', 'SAND', 'PALMTREES', 'SHARK',
@@ -38,9 +40,10 @@ def print_search_board(board):
         for index_row in row:
             print(index_row, end=' ')
         print()
+    print()
 
 
-# prints info of a all words: first letter, last letter, and lengt of word
+# prints info of a all words: first letter, last letter, and length of word
 def print_word_list_details(list_of_words):
     for word in range(len(list_of_words)):
         first_letter = list_of_words[word][0]
@@ -69,28 +72,55 @@ def find_letter_location(board, letter):
     print(matches)
 
 
-# searches for a word on the board
-def search_word(word, board):
-    first_letter = word[0]
-    last_letter = word[len(word) - 1]
-    length_of_word = len(word)
-
-    # start at the first or last letter
-
-    # check to see if first or last letter
-    # exists.
-
-    # check all letters in direction moved
-    # compare and see if match
-
-    find_letter_location(board, first_letter)
-    find_letter_location(board, last_letter)
+# searches for a word on the board via row and column
+# prints row and column of where the first letter starts
+# prints if word is left to right, right to left, up to down, or down to up
+def solve_game(word, board):
+    # transpose columns into rows
+    board_transpose = np.transpose(board)
+    # track row or column word where word was found
+    row_count = 0
+    column_count = 0
+    # reverse the word to simulate right to left search
+    reverse_word = word[::-1]
+    # find words in row
+    for row in board:
+        row_count += 1
+        # convert character list into single string
+        temp = ""
+        temp = temp.join(row)
+        # check to see if word match from left to right in string
+        if temp.__contains__(word):
+            row_hit_LR = row_count
+            column_hit = int(temp.find(word))
+            print(word + "\nRow: " + str(row_hit_LR) + ' Column: ' + str(column_hit) + " | L to R")
+            print()
+        # check to see if word matches from right to left in string
+        elif temp.__contains__(reverse_word):
+            row_hit_RL = row_count
+            column_hit_RL = temp.find(reverse_word) + len(reverse_word)
+            print(word + "\nRow: " + str(row_hit_RL) + ' Column: ' + str(column_hit_RL) + " | R to L")
+            print()
+    # find words in column
+    for column in board_transpose:
+        column_count += 1
+        # convert character list into single string
+        temp = ""
+        temp = temp.join(column)
+        if temp.__contains__(word):
+            row_hit_UD = temp.find(word) + 1
+            column_hit_UD = column_count
+            print(word + "\nRow: " + str(row_hit_UD) + ' Column: ' + str(column_hit_UD) + " | U to D")
+            print()
+        elif temp.__contains__(reverse_word):
+            row_hit_DU = temp.find(reverse_word) + len(reverse_word) +1
+            column_hit_DU = column_count
+            print(word + "\nRow: " + str(row_hit_DU) + ' Column: ' + str(column_hit_DU) + " | D to U")
+            print()
 
 
 if __name__ == '__main__':
-    # print_word_bank(word_bank)
-    # print_search_board(search_board)
-    # print_word_details(word_bank)
-    # find_letter_location(search_board, 'a')
-    for index in word_bank:
-        search_word(index, search_board)
+    print_word_bank(word_bank)
+    print_search_board(search_board)
+    for word in range(len(word_bank)):
+        solve_game(word_bank[word], search_board)
