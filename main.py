@@ -40,6 +40,7 @@ def print_search_board(board):
         for index_row in row:
             print(index_row, end=' ')
         print()
+    print()
 
 
 # prints info of a all words: first letter, last letter, and length of word
@@ -71,7 +72,9 @@ def find_letter_location(board, letter):
     print(matches)
 
 
-# searches for a word on the board
+# searches for a word on the board via row and column
+# prints row and column of where the first letter starts
+# prints if word is left to right, right to left, up to down, or down to up
 def solve_game(word, board):
     # transpose columns into rows
     board_transpose = np.transpose(board)
@@ -88,10 +91,16 @@ def solve_game(word, board):
         temp = temp.join(row)
         # check to see if word match from left to right in string
         if temp.__contains__(word):
-            print(word + " Row: " + str(row_count) + "\nMatch L to R: " + temp)
+            row_hit_LR = row_count
+            column_hit = int(temp.find(word))
+            print(word + "\nRow: " + str(row_hit_LR) + ' Column: ' + str(column_hit) + " | L to R")
+            print()
         # check to see if word matches from right to left in string
         elif temp.__contains__(reverse_word):
-            print(word + " Row: " + str(row_count) + "\nMatch R to L: " + temp)
+            row_hit_RL = row_count
+            column_hit_RL = temp.find(reverse_word) + len(reverse_word)
+            print(word + "\nRow: " + str(row_hit_RL) + ' Column: ' + str(column_hit_RL) + " | R to L")
+            print()
     # find words in column
     for column in board_transpose:
         column_count += 1
@@ -99,9 +108,15 @@ def solve_game(word, board):
         temp = ""
         temp = temp.join(column)
         if temp.__contains__(word):
-            print(word + " Column: " + str(column_count) + "\nMatch U to D:" + temp)
+            row_hit_UD = temp.find(word) + 1
+            column_hit_UD = column_count
+            print(word + "\nRow: " + str(row_hit_UD) + ' Column: ' + str(column_hit_UD) + " | U to D")
+            print()
         elif temp.__contains__(reverse_word):
-            print(word + " Column: " + str(column_count) + "\nMatch D to U:" + temp)
+            row_hit_DU = temp.find(reverse_word) + len(reverse_word) +1
+            column_hit_DU = column_count
+            print(word + "\nRow: " + str(row_hit_DU) + ' Column: ' + str(column_hit_DU) + " | D to U")
+            print()
 
 
 if __name__ == '__main__':
